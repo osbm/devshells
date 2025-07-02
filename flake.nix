@@ -79,6 +79,33 @@
           echo Activating AI environment without CUDA
         '';
       };
+      gradle8 = let
+        pkgs = import nixpkgs {
+          inherit system;
+        };
+       in
+        pkgs.mkShell {
+        packages = with pkgs; [
+          gradle_8
+        ];
+        shellHook = ''
+          echo Activating Gradle 8 environment
+        '';
+      };
+      gradle7 =
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+          };
+        in
+        pkgs.mkShell {
+        packages = with pkgs; [
+          gradle_7
+        ];
+        shellHook = ''
+          echo Activating Gradle 7 environment
+        '';
+      };
       default = torch-cuda;
     });
   };
