@@ -52,6 +52,33 @@
           echo Activating AI CUDA environment
         '';
       };
+      torch = let
+        pkgs = import nixpkgs {
+          inherit system;
+        };
+        in
+        pkgs.mkShell {
+        packages = with pkgs; [
+          (python312.withPackages (
+            ppkgs:
+              with python312Packages; [
+                pip
+                torch
+                torchvision
+                torchaudio
+                transformers
+                pandas
+                numpy
+                scikit-learn
+                matplotlib
+                seaborn
+              ]
+          ))
+        ];
+        shellHook = ''
+          echo Activating AI environment without CUDA
+        '';
+      };
       default = torch-cuda;
     });
   };
