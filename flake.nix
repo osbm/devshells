@@ -106,6 +106,21 @@
           echo Activating Gradle 7 environment
         '';
       };
+      nodejs = let
+        pkgs = import nixpkgs {
+          inherit system;
+        };
+       in
+        pkgs.mkShell {
+        packages = with pkgs; [
+          nodejs
+          yarn
+          npm
+        ];
+        shellHook = ''
+          echo Activating Node.js environment
+        '';
+      };
       default = torch-cuda;
     });
   };
