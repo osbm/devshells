@@ -15,12 +15,12 @@ in
       rustfmt
       rust-analyzer
       clippy
-      
+
       # Build dependencies
       pkg-config
       openssl
     ];
-    
+
     shellHook = ''
       echo "🦀 Activating Rust development environment"
     '';
