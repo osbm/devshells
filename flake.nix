@@ -110,7 +110,7 @@
             echo Activating Gradle 7 environment
           '';
         };
-      nodejs = let
+      javascript = let
         pkgs = import nixpkgs {
           inherit system;
         };
