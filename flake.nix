@@ -21,65 +21,6 @@
     ];
   in {
     devShells = forAllSystems (system: rec {
-      torch-cuda = let
-        pkgs = import nixpkgs {
-          inherit system;
-          config = {
-            android_sdk.accept_license = true;
-            allowUnfree = true;
-            cudaSupport = true;
-          };
-        };
-      in
-        pkgs.mkShell {
-          packages = with pkgs; [
-            (python312.withPackages (
-              ppkgs:
-                with python312Packages; [
-                  pip
-                  torchWithCuda
-                  torchvision
-                  torchaudio
-                  transformers
-                  pandas
-                  numpy
-                  scikit-learn
-                  matplotlib
-                  seaborn
-                ]
-            ))
-          ];
-          shellHook = ''
-            echo Activating AI CUDA environment
-          '';
-        };
-      torch = let
-        pkgs = import nixpkgs {
-          inherit system;
-        };
-      in
-        pkgs.mkShell {
-          packages = with pkgs; [
-            (python312.withPackages (
-              ppkgs:
-                with python312Packages; [
-                  pip
-                  torch
-                  torchvision
-                  torchaudio
-                  transformers
-                  pandas
-                  numpy
-                  scikit-learn
-                  matplotlib
-                  seaborn
-                ]
-            ))
-          ];
-          shellHook = ''
-            echo Activating AI environment without CUDA
-          '';
-        };
       gradle8 = let
         pkgs = import nixpkgs {
           inherit system;
@@ -106,20 +47,7 @@
             echo Activating Gradle 7 environment
           '';
         };
-      javascript = let
-        pkgs = import nixpkgs {
-          inherit system;
-        };
-      in
-        pkgs.mkShell {
-          packages = with pkgs; [
-            nodejs
-            yarn
-          ];
-          shellHook = ''
-            echo Activating Node.js environment
-          '';
-        };
+
       flutter = let
         pkgs = import nixpkgs {
           inherit system;
