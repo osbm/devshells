@@ -11,7 +11,7 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
-  outputs = {nixpkgs, ...}: let
+  outputs = {nixpkgs, ...} @ inputs: let
     forAllSystems = nixpkgs.lib.genAttrs [
       "aarch64-linux"
       "i686-linux"
@@ -21,7 +21,24 @@
     ];
   in {
     devShells = forAllSystems (system: rec {
-      default = torch-cuda;
+      default = python-ai;
+      
+      # Import devshells from the devshells folder
+      flutter = import ./devshells/flutter.nix {
+        inherit inputs system;
+      };
+      
+      python-ai = import ./devshells/python-ai.nix {
+        inherit inputs system;
+      };
+      
+      gradle8 = import ./devshells/gradle8.nix {
+        inherit inputs system;
+      };
+      
+      javascript = import ./devshells/javascript.nix {
+        inherit inputs system;
+      };
     });
   };
 }
