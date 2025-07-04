@@ -118,7 +118,6 @@
           packages = with pkgs; [
             nodejs
             yarn
-            npm
           ];
           shellHook = ''
             echo Activating Node.js environment
