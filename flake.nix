@@ -19,28 +19,33 @@
       "aarch64-darwin"
       "x86_64-darwin"
     ];
-    
+
     # Automatically import all devshells from the devshells folder
     importDevshells = system: let
       devshellsDir = ./devshells;
       devshellFiles = builtins.readDir devshellsDir;
-      
+
       # Filter for .nix files and create devshell attributes
-      devshells = nixpkgs.lib.mapAttrs' (filename: _fileType: let
-        # Remove .nix extension to get the devshell name
-        devshellName = nixpkgs.lib.removeSuffix ".nix" filename;
-      in {
-        name = devshellName;
-        value = import (devshellsDir + "/${filename}") {
-          inherit inputs system;
-        };
-      }) (nixpkgs.lib.filterAttrs (filename: fileType:
-        fileType == "regular" && nixpkgs.lib.hasSuffix ".nix" filename
-      ) devshellFiles);
-    in devshells;
+      devshells =
+        nixpkgs.lib.mapAttrs' (filename: _fileType: let
+          # Remove .nix extension to get the devshell name
+          devshellName = nixpkgs.lib.removeSuffix ".nix" filename;
+        in {
+          name = devshellName;
+          value = import (devshellsDir + "/${filename}") {
+            inherit inputs system;
+          };
+        }) (nixpkgs.lib.filterAttrs (
+            filename: fileType:
+              fileType == "regular" && nixpkgs.lib.hasSuffix ".nix" filename
+          )
+          devshellFiles);
+    in
+      devshells;
   in {
-    devShells = forAllSystems (system: 
-      importDevshells system
+    devShells = forAllSystems (
+      system:
+        importDevshells system
     );
   };
 }
