@@ -1,0 +1,23 @@
+name: Devshells CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  devshells:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        devshell: [javascript, rust, torch, torch-nocuda, flutter, gradle8]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+
+      - name: Run nix develop for ${{ matrix.devshell }}
+        run: nix develop .#${{ matrix.devshell }} -c echo "hello world from ${{ matrix.devshell }}"
