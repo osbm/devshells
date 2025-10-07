@@ -40,6 +40,7 @@ in
             scikit-learn
             matplotlib
             seaborn
+            tqdm
           ]
       ))
     ];
